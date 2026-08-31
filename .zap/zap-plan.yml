@@ -30,7 +30,7 @@ jobs:
 
   - type: report # Generación de reportes automáticos
     parameters:
-      template: modern # Reporte HTML estético
+      template: sarif-json # Reporte SARIF
       reportDir: /zap/wrk/reports
       reportFile: zap-report
       reportTitle: "Notes App - Security Scan Report"
