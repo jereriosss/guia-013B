@@ -34,3 +34,7 @@ jobs:
       reportDir: /zap/wrk/reports
       reportFile: zap-report
       reportTitle: "Notes App - Security Scan Report"
+
+network:
+  mainProxy:
+    port:8090
