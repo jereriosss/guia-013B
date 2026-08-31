@@ -37,7 +37,7 @@
                        "cache-control" : "no-cache",
                        "host" : "localhost:8080",
                        "pragma" : "no-cache",
-                       "user-agent" : "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Safari\/537.36"
+                       "user-agent" : ""
                    },
                    "body": {
                        
@@ -53,7 +53,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -116,72 +116,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
-                       "ETag" : "\"6a91dd7c-da1\"",
-                       "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
-                       "Server" : "nginx\/1.29.8"
-                   },
-                   "body": {
-                       "text": "<!doctype html><html lang=\"es\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Notes App<\/title><style>body{font:16px system-ui;max-width:760px;margin:3rem auto;padding:0 1rem;background:#f6f7f9}form,article{background:white;padding:1rem;margin:1rem 0;border-radius:.6rem}input,button{padding:.6rem;margin:.2rem}input{width:38%}#login-box input{width:80%;display:block}#app{display:none}#logout{display:block;margin:0 auto 1rem}<\/style><h1>Notes App \u2014 Operaciones 1<\/h1><p id=\"status\">Comprobando\u2026<\/p>\n<section id=\"login-box\"><form id=\"login-form\"><h2>Iniciar sesi\u00F3n<\/h2><input id=\"username\" required placeholder=\"Usuario\" autocomplete=\"username\"><input id=\"password\" type=\"password\" required placeholder=\"Contrase\u00F1a\" autocomplete=\"current-password\"><button>Entrar<\/button><p id=\"login-error\" style=\"color:#b00\"><\/p><\/form><\/section>\n<section id=\"app\"><button id=\"logout\">Salir<\/button><form id=\"form\"><input id=\"title\" required maxlength=\"200\" placeholder=\"T\u00EDtulo\"><input id=\"content\" placeholder=\"Contenido\"><button>Crear<\/button><\/form><main id=\"notes\"><\/main><\/section>\n<script>\nconst statusEl=document.getElementById('status'),notesEl=document.getElementById('notes'),formEl=document.getElementById('form'),titleEl=document.getElementById('title'),contentEl=document.getElementById('content');\nconst loginBox=document.getElementById('login-box'),appBox=document.getElementById('app'),loginForm=document.getElementById('login-form'),userEl=document.getElementById('username'),passEl=document.getElementById('password'),loginError=document.getElementById('login-error'),logoutBtn=document.getElementById('logout');\nfunction esc(s){let d=document.createElement('div');d.textContent=s??'';return d.innerHTML}\nasync function checkSession(){\n  let r=await fetch('\/api\/session');let j=await r.json();\n  if(j.authenticated){loginBox.style.display='none';appBox.style.display='block';statusEl.textContent='Sesi\u00F3n activa como '+j.user;await load()}\n  else{loginBox.style.display='block';appBox.style.display='none';statusEl.textContent='Necesit\u00E1s iniciar sesi\u00F3n'}\n}\nasync function load(){\n  try{\n    let h=await fetch('\/health');if(!h.ok)throw new Error('health '+h.status);\n    let r=await fetch('\/api\/notes');\n    if(r.status===401){return checkSession()}\n    if(!r.ok)throw new Error('notes '+r.status);\n    let xs=await r.json();\n    statusEl.textContent='Backend y base conectados';\n    notesEl.innerHTML=xs.map(x=>`<article><b>${esc(x.title)}<\/b><p>${esc(x.content)}<\/p><button onclick=\"del(${x.id})\">Eliminar<\/button><\/article>`).join('')\n  }catch(e){statusEl.textContent='Servicio no disponible: '+e.message}\n}\nasync function del(id){await fetch('\/api\/notes\/'+id,{method:'DELETE'});await load()}\nformEl.onsubmit=async e=>{e.preventDefault();await fetch('\/api\/notes',{method:'POST',headers:{'Content-Type':'application\/json'},body:JSON.stringify({title:titleEl.value,content:contentEl.value})});formEl.reset();await load()};\nloginForm.onsubmit=async e=>{\n  e.preventDefault();loginError.textContent='';\n  let r=await fetch('\/api\/login',{method:'POST',headers:{'Content-Type':'application\/json'},body:JSON.stringify({username:userEl.value,password:passEl.value})});\n  if(r.ok){passEl.value='';await checkSession()}else{let j=await r.json().catch(()=>({}));loginError.textContent=j.error||'Error de autenticaci\u00F3n'}\n};\nlogoutBtn.onclick=async()=>{await fetch('\/api\/logout',{method:'POST'});await checkSession()};\ncheckSession();\n<\/script>\n<\/html>\n"
-                   },
-                   "noResponseReceived": false
-               }
-            },
-            {
-               "level": "warning",
-               "locations": [
-                  {
-                     "physicalLocation": {
-                        "artifactLocation": {
-                           "uri": "http:\/\/localhost:8080\/favicon.ico"
-                        },
-                        
-                        "region": {
-                           "startLine": 1,
-                           
-                           "snippet": {
-                               "text": ""
-                           }
-                        }
-                     },
-                     "properties": {
-                         "attack": ""
-                     }
-                  }
-               ],
-               "message": {
-                  "text": "The response does not protect against 'ClickJacking' attacks. It should include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options."
-               },
-               "ruleId": "10020",
-               "webRequest": {
-                   "protocol": "HTTP",
-                   "version": "1.1",
-                   "target": "http:\/\/localhost:8080\/favicon.ico",
-                   "method": "GET",
-                   "headers": {
-                       "Accept" : "image\/avif,image\/webp,image\/png,image\/svg+xml,image\/*;q=0.8,*\/*;q=0.5",
-                       "Accept-Language" : "en-US,en;q=0.5",
-                       "Connection" : "keep-alive",
-                       "Priority" : "u=6",
-                       "Referer" : "http:\/\/localhost:8080\/",
-                       "User-Agent" : "Mozilla\/5.0 (X11; Linux x86_64; rv:140.0) Gecko\/20100101 Firefox\/140.0",
-                       "host" : "localhost:8080"
-                   },
-                   "body": {
-                       
-                   }
-               },
-               "webResponse": {
-                   "statusCode": 200,
-                   "reasonPhrase": "OK",
-                   "protocol": "HTTP",
-                   "version": "1.1",
-                   "headers": {
-                       "Accept-Ranges" : "bytes",
-                       "Connection" : "keep-alive",
-                       "Content-Length" : "3489",
-                       "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:15 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -243,7 +178,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -305,7 +240,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -367,7 +302,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -430,7 +365,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -495,7 +430,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:15 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:27 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -557,7 +492,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -619,7 +554,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -740,7 +675,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -803,7 +738,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -867,7 +802,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "36",
                        "Content-Type" : "application\/json",
-                       "Date" : "Mon, 31 Aug 2026 19:22:15 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:27 GMT",
                        "Server" : "nginx\/1.29.8",
                        "Vary" : "Cookie"
                    },
@@ -928,7 +863,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -990,7 +925,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1055,7 +990,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1121,7 +1056,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1188,7 +1123,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "36",
                        "Content-Type" : "application\/json",
-                       "Date" : "Mon, 31 Aug 2026 19:22:15 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:27 GMT",
                        "Server" : "nginx\/1.29.8",
                        "Vary" : "Cookie"
                    },
@@ -1252,7 +1187,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1317,7 +1252,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1382,7 +1317,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1448,7 +1383,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1516,7 +1451,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:15 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:27 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1581,7 +1516,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
@@ -1646,7 +1581,7 @@
                        "Connection" : "keep-alive",
                        "Content-Length" : "3489",
                        "Content-Type" : "text\/html",
-                       "Date" : "Mon, 31 Aug 2026 19:22:09 GMT",
+                       "Date" : "Mon, 31 Aug 2026 19:31:21 GMT",
                        "ETag" : "\"6a91dd7c-da1\"",
                        "Last-Modified" : "Fri, 28 Aug 2026 19:11:56 GMT",
                        "Server" : "nginx\/1.29.8"
