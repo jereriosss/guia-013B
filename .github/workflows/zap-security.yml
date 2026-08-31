@@ -40,3 +40,9 @@ jobs:
           name: zap-security-report
           path: reports/
           retention-days: 7
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() # Para que suba los resultados incluso si hubo alertas
+        with:
+          sarif_file: reports/zap-report.sarif.json
