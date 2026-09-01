@@ -11,8 +11,9 @@ jobs:
     name: Scan the web application
     runs-on: ubuntu-latest
     permissions:
-      security-events: write # Permiso para subir reportes SARIF
-      contents: read # Permiso para hacer el checkout del repositorio
+      security-events: write # Permiso para publicar en Security -> Code scanning
+      contents: read         # Permiso para clonar el repositorio
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,8 +45,18 @@ jobs:
           path: reports/
           retention-days: 7
 
+      - name: Normalizar URIs en SARIF
+        if: always()
+        run: |
+          if [ -f reports/zap-report.sarif.json ]; then
+            sed -i 's|"uri": "http://[^"]*|"uri": "docker-compose.yml|g' reports/zap-report.sarif.json
+            sed -i 's|"uri": "https://[^"]*|"uri": "docker-compose.yml|g' reports/zap-report.sarif.json
+          fi
+
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3
-        if: always() # Para que suba los resultados incluso si hubo alertas
+        if: always()
         with:
           sarif_file: reports/zap-report.sarif.json
+          category: zap-scan
+
